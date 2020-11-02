@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Twilio\TwilioController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -24,3 +26,7 @@ Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 Route::get('/login/{provider}', [LoginController::class, 'redirectToProvider']);
 Route::get('/login/{provider}/callback', [LoginController::class, 'handleProviderCallback']);
+
+
+// Twilio
+Route::post('/twilio/send-whatsapp-message', [TwilioController::class, 'sendWhatsappMessages']);
