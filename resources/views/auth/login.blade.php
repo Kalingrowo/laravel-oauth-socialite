@@ -66,11 +66,14 @@
                         </div>
 
                     </form>
-                        
+
                     <hr>
                     <div class="row">
                         <div class="col-md-12">
-                            <a class="btn btn-primary btn-sm" type="button" href="{{ url('/login/facebook') }}">Login Facebook</a>
+                            <a class="btn btn-primary btn-sm" type="button" href="{{ url('/login/gmail') }}" title="Login menggunakan GMail"><i class="fa fa-envelope"></i></a>
+                            <a class="btn btn-primary btn-sm" type="button" href="{{ url('/login/github') }}" title="Login menggunakan Github"><i class="fa fa-github"></i></a>
+                            <a class="btn btn-primary btn-sm" type="button" href="{{ url('/login/facebook') }}" title="Login menggunakan Facebook"><i class="fa fa-facebook"></i></a>
+                            <a class="btn btn-primary btn-sm" type="button" href="{{ url('/login/twitter') }}" title="Login menggunakan Twitter"><i class="fa fa-twitter"></i></a>
                         </div>
                     </div>
                 </div>
