@@ -7,6 +7,7 @@ use App\Models\SocialMediaAccount;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Auth;
+use Carbon\Carbon;
 use DB;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Laravel\Socialite\Facades\Socialite;
@@ -61,42 +62,23 @@ class LoginController extends Controller
     {
         try {
             $user = Socialite::driver($provider)->user();
-            $authUser = $this->findOrCreateUser($user, $provider);
+
+            $authUser = User::firstOrCreate(
+                    [
+                        'provider' => $provider,
+                        'provider_id' => $user->id
+                    ],
+                    [
+                        'name' => $user->name,
+                        'email' => !empty($user->email) ? $user->email : '',
+                    ]
+                );
+            
             Auth::login($authUser, true);
             return redirect()->to('/home');
             // $user->token;
         } catch (\Throwable $th) {
             return redirect()->to('/login');
-        }
-    }
-
-    public function findOrCreateUser($user, $provider)
-    {
-        DB::beginTransaction();
-        try {
-            $authUser = User::whereHas('getSocialMediaAccount', function ($q) use ($user) {
-                    $q->where('provider_id', $user->id);
-                })
-                ->first();
-
-            if (!$authUser) {
-                $authUser = User::create([
-                    'name' => $user->name,
-                    'email' => !empty($user->email) ? $user->email : '',
-                ]);
-    
-                $newProvider = SocialMediaAccount::create([
-                    'user_id' => $authUser->id,
-                    'provider' => $provider,
-                    'provider_id' => $user->id
-                ]);
-            }
-
-            DB::commit();
-            return $authUser;
-        } catch (\Throwable $th) {
-            DB::rollBack();
-            return 'error : ' . $th->getMessage();
         }
     }
 }
