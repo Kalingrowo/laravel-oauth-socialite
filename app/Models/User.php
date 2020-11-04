@@ -40,9 +40,4 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-
-    public function getSocialMediaAccount()
-    {
-        return $this->hasMany('App\Models\SocialMediaAccount', 'user_id', 'id');
-    }
 }
