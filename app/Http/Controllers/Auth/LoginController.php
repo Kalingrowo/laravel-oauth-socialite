@@ -3,13 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\SocialMediaAccount;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Auth;
-use Carbon\Carbon;
-use DB;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
 use Laravel\Socialite\Facades\Socialite;
 
 class LoginController extends Controller
@@ -79,6 +77,22 @@ class LoginController extends Controller
             // $user->token;
         } catch (\Throwable $th) {
             return redirect()->to('/login');
+        }
+    }
+
+    public function apiLogin()
+    {
+        if (Auth::attempt(['email' => request('email'), 'password' => request('password')])) {
+            $user = Auth::user();
+            $authToken =  $user->createToken('sanctum-test')->plainTextToken;
+            
+            return response()->json([
+                'token' => $authToken
+            ], 200);
+        } else {
+            return response()->json([
+                'error' => 'Unauthorised'
+            ], 401);
         }
     }
 }
