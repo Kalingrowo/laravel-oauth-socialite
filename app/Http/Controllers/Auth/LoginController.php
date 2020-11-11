@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use DB;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Laravel\Socialite\Facades\Socialite;
+use Log;
 
 class LoginController extends Controller
 {
@@ -78,6 +79,7 @@ class LoginController extends Controller
             return redirect()->to('/home');
             // $user->token;
         } catch (\Throwable $th) {
+            Log::error($th->getMessage());
             return redirect()->to('/login');
         }
     }
